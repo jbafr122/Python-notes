@@ -101,4 +101,8 @@ Logging Levels
 There are levels to logging and can be filtered using there assinged level. DEBUG, INFO, WARNING, ERROR, CRITICAL. 
 
 Disable Logging
-You can use logging.disable() to disable all logging messags once you finish debugging your code. You can pass in the specific log type you want to disable messages for like this logging.disable(logging.CRITICAL). 
+You can use logging.disable() to disable all logging messags once you finish debugging your code. You can pass in the specific log type you want to disable messages for like this logging.disable(logging.CRITICAL).
+
+TLDR:
+Assertions - midway checks to see if everything is working. if the condition turns out to be false, results in assertion error and stops running program
+Logging - keeps track while running program. either sends messages or can store results in file 
