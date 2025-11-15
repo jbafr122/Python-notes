@@ -1,3 +1,5 @@
+CHAPTER 5 - debugging
+
 assert - statement to check if something is true and if it is not then the entire program stops. works like a sanity check when debugging code.
 >>> ages = [26, 57, 92, 54, 22, 15, 17, 80, 47, 73]
 >>> ages.sort()
