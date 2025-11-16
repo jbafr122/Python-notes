@@ -1,0 +1,39 @@
+CHAPTER 6
+Lists
+
+List - A value that holds multiple values in a sequence and delimited by a comma
+
+Indexing into a list
+spam = ['cat', 'bat', 'rat', 'elephant']
+spam[0] -> cat
+spam[1] -> bat
+... and so on
+
+Negative indexing - Indexes start at 0 and go up. So -1 refers to the last index in a list and -2 would be the second to last index and so on
+spam = ['cat', 'bat', 'rat', 'elepahnt']
+spam[-1] -> elephant
+spam[-2] -> rat
+
+Slices - Several values from a list instead of just one
+spam = ['cat', 'bat', 'rat', 'elepahnt']
+spam[0:4] -> ['cat', 'bat', 'rat', 'elepahnt']
+spam[1:3] -> ['bat', 'rat']
+spam[0:-1] -> ['cat', 'bat', 'rat']
+spam[:2] -> ['cat', 'bat']
+
+len funtion - returns the length of a list
+spam = ['cat', 'bat', 'rat', 'elepahnt']
+len(spam) -> 4
+
+Concatenation of strings is possible
+[1, 2, 3] + ['A', 'B', 'C'] -> [1, 2, 3, 'A', 'B', 'C']
+
+del function - removes a value from the list
+del spam[2] # value in index 2 is removed
+
+in and not operators with lists
+You can use the in and not operators to create boolean expressions to determine if a value is in a list or not
+'howdy' in ['hello', 'hi', 'howdy', 'heyas'] -> returns True
+
+
+
