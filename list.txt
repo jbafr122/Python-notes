@@ -35,5 +35,47 @@ in and not operators with lists
 You can use the in and not operators to create boolean expressions to determine if a value is in a list or not
 'howdy' in ['hello', 'hi', 'howdy', 'heyas'] -> returns True
 
+List methods
+Use this for reference spam = ['hello', 'hi', 'howdy', 'heyas']
+index() - find the index of value passed in
+spam.index('hello') -> 0
 
+append() - adds new value to list
+spam.append('moose') -> spam = ['hello', 'hi', 'howdy', 'heyas', 'moose']
 
+insert() - adds new value to list at a specific index
+spam.insert('moose', 1) -> spam = ['hello', 'moose', hi', 'howdy', 'heynas']
+
+remove() - remove value from list
+spam.remove('hello') -> spam = ['moose', 'hi', 'howdy', 'heynas']
+
+sort() - sorts
+spam.sort()
+
+reverse - reverses
+spam.reverse()
+
+You can index into a string and tuple like a list
+name = 'Zophie'
+name[0] = 'Z'
+Note that this would be a str since python does not have char values like Java and C
+
+Lists are a mutable data type (you can add, remove, or change values)
+Strings are immutable. Attempting to reassign an index of a String will result in error
+name = 'John' 
+name[0] = 'b' -> ERROR (TypeError to more specific)
+
+Tuples are immutable
+
+List and Tuple Conversion
+tuple() - changes list into tuple type
+list() - changes tuple into list type
+list() can also be used to make a string into list type 
+list('hello') -> ['h', 'e', 'l', 'l', 'o'] # Could be used to modify a string since string types are immutable
+
+To go from list to string use .join function
+new_string = ', '.join(list) #the ',' works as a seperation between each string at each index
+Also for this to wotk each element needs to be a string
+use str() type cast if another type
+EX: if an elemnent was an int
+new_string = ', '.join(str(num) for num in list))
