@@ -1,0 +1,17 @@
+CHAPTER 7 - Dictionaries and stuff
+
+Dictionary is a mutable data structure that holds many values like a list. But dictionaties use keys as indexes and each key is mapped to a value (Pythons version of map from Java) 
+
+my_cat = {'size': 'fat', 'color': 'gray', 'age': 17}
+my_cat[size] = fat
+
+size being the key and fat being the value
+
+items in a dictionary are unordered (unlike lists) so there is no first or last element
+meaning if we do dict1 == dict2 if both hae the same key value pairs, this statement will return true regardless of the order
+
+For if statements we can use the in keyword for boolean statements to look for specifc keys in a dictionary
+birthdays = {'Alice': 'Apr 1', 'Bob': 'Dec 12', 'Carol': 'Mar 4'}
+if name in birthdays:
+	print(birthdays[name])
+
