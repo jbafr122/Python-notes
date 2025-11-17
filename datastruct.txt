@@ -1,0 +1,10 @@
+CHAPTER 7 - Structuring Data
+
+Dictionary is a mutable data structure that holds many values like a list. But dictionaties use keys as indexes and each key is mapped to a value (Pythons version of map from Java) 
+
+my_cat = {'size': 'fat', 'color': 'gray', 'age': 17}
+my_cat[size] = fat
+
+size being the key and fat being the value
+
+
