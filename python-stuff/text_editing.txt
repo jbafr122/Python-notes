@@ -1,0 +1,88 @@
+CHAPTER 8
+STRINGS AND TEXT EDITING
+
+String literals - string values that appear in code
+We cant use the ' character with string so we have to develop different ways to make it appear in the string
+
+Double Quotes - Using the " instead of ' to represent a string
+spam = "That is Alice's cat."
+
+Escape Characters - allows you to use characters that are otherwise impossible to put into a string literal. An escape character is a backslash (\) followed by the character you want to use
+spam = 'Say hi to Bob\'s mother.'
+Without the \'s, Python would prematurely end the string value definition and cause errors
+
+\' Single Quote
+\" Double Quote
+\t Tab
+\n New line
+\\ Backslash
+
+>>> print("Hello there!\nHow are you?\nI\'m doing fine.")
+Hello there!
+How are you?
+I'm doing fine.
+
+Raw Strings - Ignores all escape characters
+
+>>> print(r'The file is in C:\Users\Alice\Desktop')
+The file is in C:\Users\Alice\Desktop
+
+>>> print('Hello...\n\n...world!')  # Without a raw string
+Hello...
+
+...world!
+>>> print(r'Hello...\n\n...world!')  # With a raw string
+Hello...\n\n...world!
+
+Multiline Comments - use """ to use multiline comments
+
+Indexes and Slices - Strings use indexes and slices the same way Lists do
+
+'   H  e   l   l   o  ,     w  o  r  l  d   !  '
+    0  1   2   3   4  5  6  7  8  9 10  11 12
+  -13 -12 -11 -10 -9 -8 -7 -6 -5 -4 -3 -2  -1
+
+>>> greeting = 'Hello, world!'
+>>> greeting[0]
+'H'
+>>> greeting [4]
+'o'
+>>> greeting[-1]
+'!'
+>>> greeting[0:5]
+'Hello'
+>>> greeting[:5]
+'Hello'
+>>> greeting[7:-1]
+'world'
+>>> greeting[7:]
+'world!'
+
+In and not keywords with Strings - You can use the in and not keywords with Strings similarly to how they work for lists
+
+'Hello' in 'Hello, World' -> True
+'cats' not in 'cats and dogs' -> False
+
+F-Strings - allows you to place variable names or entire expressions within a string. Uses the f prefix before4 starting quotation marks
+>>> name = 'Al'
+>>> age = 4000
+>>> f'My name is {name}. I am {age} years old.'
+'My name is Al. I am 4000 years old.'
+>>> f'In ten years I will be {age + 10}'
+'In ten years I will be 4010'
+
+F-String alternatives: %s and format() - the %s format specifier that Python would replace with another string
+>>> name = 'Al'
+>>> age = 4000
+>>> 'My name is %s. I am %s years old.' % (name, age)
+'My name is Al. I am 4000 years old.'
+>>> 'In ten years I will be %s' % (age + 10)
+'In ten years I will be 4010'
+
+format() - more features than %s, can specify which variable to replace instead of having a specific order
+>>> name = 'Al'
+>>> age = 4000
+>>> '{1} years ago, {0} was born and named {0}.'.format(name, age)
+'4000 years ago, Al was born and named Al.'
+
+
