@@ -85,4 +85,57 @@ format() - more features than %s, can specify which variable to replace instead 
 >>> '{1} years ago, {0} was born and named {0}.'.format(name, age)
 '4000 years ago, Al was born and named Al.'
 
+Upper and Lowercase with Python
+upper() - used to make the string uppercase
+spam = 'Hello, world'
+spam = spam.upper() -> 'HELLO, WORLD'
+
+lower() - used to make the string lowercase
+spam = spam.lower() -> 'hello, world'
+
+isupper() - checking if string is uppercase
+spam = 'HELLO'
+spam.isupper() -> returns True
+
+islower() - checking if the string is lowercase
+spam = 'hello'
+spam.islower() -> returns True
+
+isalpha() Returns True if the string consists only of letters and isnt blank
+
+isalnum() Returns True if the string consists only of letters and numbers (alphanumerics) and isnt blank
+
+isdecimal() Returns True if the string consists only of numeric characters and ist blank
+
+isspace() Returns True if the string consists only of spaces, tabs, and newlines and isnt blank
+
+istitle() Returns True if the string consists only of words that begin with an uppercase letter followed by only lowercase letters
+
+startswith() Returns True if a string starts with the phrase passed in 
+
+endswith() Returns True if a string starts with the phrase passed in
+
+join() Joins list of strings into one string
+', '.join(['cats', 'rats', 'bats'])
+'cats, rats, bats'
+Comma works as a delimeter to know what to separate each string by
+
+split() splits a string based on the string passed in into a list of stirngs (uses space by default)
+>>> 'MyABCnameABCisABCSimon'.split('ABC')
+['My', 'name', 'is', 'Simon']
+>>> 'My name is Simon'.split('m')
+['My na', 'e is Si', 'on']
+
+rjust() reutrns a padded version of the string with white space shifted to the right (number passed in determines how far left the string moves)
+
+ljust() returns a padded version of the string with space shifted to the left (number passed in determines how far left the string moves)
+
+center() centers the string passed in
+
+strip() removes whitespace in a string
+
+paperclip.copy() - attaches the passed in phrase to the clipboard
+
+paperclip.paste() - pastes whatever the clipboard is holding
+
 
