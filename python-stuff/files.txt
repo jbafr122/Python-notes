@@ -1,0 +1,146 @@
+CHAPTER 10 - READING AND WRITING TO FILES
+
+Libraries used for files - pathlib, os
+Use from pathlib import Path otherwise we would have to type pathlib.Path everywhere Path is used in code
+It is usually a good idea to use / over \ in Python code so that it always works in any operating system
+
+Joining Paths
+We can join two Path objects together similar to string concatenation using the + character.
+>>> from pathlib import Path
+>>> Path('spam') / 'bacon' / 'eggs'
+WindowsPath('spam/bacon/eggs')
+>>> Path('spam') / Path('bacon/eggs')
+WindowsPath('spam/bacon/eggs')
+>>> Path('spam') / Path('bacon', 'eggs')
+WindowsPath('spam/bacon/eggs')
+
+Both must be Path objects or the leftmost value must be a Path object or else it will result in error
+>>> 'spam' / 'bacon'
+Traceback (most recent call last):
+  File "<python-input-0>", line 1, in <module>
+TypeError: unsupported operand type(s) for /: 'str' and 'str'
+
+Accessing the Current Working Directory
+Path.cwd() - returns the current working directory
+os.chdir() - changes the current working directory
+>>> from pathlib import Path
+>>> import os
+>>> Path.cwd()
+WindowsPath('C:/Users/Al/AppData/Local/Programs/Python/Python313')
+>>> os.chdir('C:\\Windows\\System32')
+>>> Path.cwd()
+WindowsPath('C:/Windows/System32')
+
+Accessing Home Directory
+Path.home() - returns the home directory or folder
+
+Absolute Path - The full path of directory starting from the root directory
+
+Relative Path - THe path of a directory based on the current working directory
+
+Creating New Folders
+os.makedirs() - create new folders
+>>> import os
+>>> os.makedirs('C:\\delicious\\walnut\\waffles')
+
+mkdir() - To make a directory from a Path object
+>>> from pathlib import Path
+>>> Path(r'C:\Users\Al\spam').mkdir()
+
+Handling Absolute and Relative Paths
+is_absolute() - method for Path object, returns True if path represents an absolute path or False if it is a relative path
+>>> from pathlib import Path
+>>> Path.cwd()
+WindowsPath('C:/Users/Al/AppData/Local/Programs/Python/Python312')
+>>> Path.cwd().is_absolute()
+True
+>>> Path('spam/bacon/eggs').is_absolute()
+False
+
+Path.cwd() - To get the absolute path from a relative path, put / in front of the relative Path object
+absolute() - Also returns absolute path
+>>> from pathlib import Path
+>>> Path('my/relative/path')
+WindowsPath('my/relative/path')
+>>> Path.cwd() / Path('my/relative/path')
+WindowsPath('C:/Users/Al/Desktop/my/relative/path')
+>>> Path('my/relative/path').absolute()
+WindowsPath('C:/Users/Al/Desktop/my/relative/path')
+
+Parts of A filepath
+/home/al/spam.txt - Linux
+C:\Users\Al\spam.txt - Windows
+The anchor, is the root of the file system (/)
+On Windows, the drive is the single letter that the physical drive is labeled as (C:)
+The parent is the folder that contains the file (/home/al/)
+The name of the file is made up of the stem (base name, spam) and the suffix (or extension, .txt)
+>>> from pathlib import Path
+>>> p = Path('C:/Users/Al/spam.txt')
+>>> p.anchor
+'C:\\'
+>>> p.parent 
+WindowsPath('C:/Users/Al')
+>>> p.name
+'spam.txt'
+>>> p.stem
+'spam'
+>>> p.suffix
+'.txt'
+>>> p.drive
+'C:'
+
+Each attribute evaluates to a string value except for the parent, which evaluates to another Path object.
+>>> from pathlib import Path
+>>> p = Path('C:/Users/Al/spam.txt')
+>>> p.parts
+('C:\\', 'Users', 'Al', 'spam.txt')
+ >>> p.parts[3]
+'spam.txt'
+>>> p.parts[0:2]
+('C:\\', 'Users')
+
+File Sizes and Timestamps
+The stat() method returns a stat_result object with file size and timestamp information about the file
+>>> from pathlib import Path
+>>> calc_file = Path('C:/Windows/System32/calc.exe')
+>>> calc_file.stat()
+os.stat_result(st_mode=33279, st_ino=562949956525418, st_dev=3739257218,
+st_nlink=2, st_uid=0, st_gid=0, st_size=27648, st_atime=1678984560,
+st_mtime=1575709787, st_ctime=1575709787)
+>>> calc_file.stat().st_size
+27648
+>>> calc_file.stat().st_mtime
+1712627129.0906117
+>>> import time
+>>> time.asctime(time.localtime(calc_file.stat().st_mtime))
+'Mon Apr  8 20:45:29 2024'
+
+Checking Path Validity
+p.exists() returns True if the path exists, otherwise returns False
+p.is_file() returns True if the path exists and is a file, and returns False otherwise
+p.is_dir() returns True if the path exists and is a directory, and returns False otherwise
+
+Opening Files
+We can use the open() function to open a file, pass in a string representing what file you want to open. This can be an absolute or relative path. The open() function returns a File object. If a file passed to open does not exist, the function will create and return the new one.
+
+Reading File Contents
+read() method allows you to read the contents of a File object
+readlines() method reads the file and formats the result into a list
+
+Writing to Files
+open() with the 'w' parameter opens the file in write mode and then using the write() function we can write to the file. You cannot write to a file that is already in write mode. You can pass in 'a' as a parameter to open to append any text with write.
+
+Shelve variables
+Work similar to dictionaries in that we can add a file to shelve and add it to out shelf. Using the name of the file as a key to access the stored values in the shelf. We can us close() to stop using the shelf.
+
+>>> import shelve
+>>> shelf_file = shelve.open('mydata')
+
+>>> shelf_file['cats'] = ['Zophie', 'Pooka', 'Simon']
+>>> shelf_file.close()
+>>> shelf_file = shelve.open('mydata')
+>>> type(shelf_file) 
+<class 'shelve.DbfilenameShelf'>
+>>> shelf_file['cats']
+['Zophie', 'Pooka', 'Simon']
+>>> shelf_file.close() 

@@ -1,0 +1,287 @@
+CHAPTER 9
+TEXT PATTERN MATCHING WITH REGULAR EXPRESSIONS
+
+We use regular expressions and patterns to match and simplify processes to take 3 steps rather than 3000
+Like looking for "-" in phone numbers or any character separating a group of numbers 
+This pattern matching method refers to a regular expression
+
+Regular expressions, called regexes for short, are a sort of mini language that describes a pattern of text. For example, the characters \d in a regex stand for a decimal numeral between 0 and 9. 
+Note that we often write regex strings as raw strings, with the r prefix. This is useful, as regex strings often have backslashes. Without using raw strings, we would have to enter expressions such as '\\d'.
+
+We'll stick with the example regular expression string r'\d{3}-\d{3}-\d{4}' used to find US phone numbers in a text string 'My number is 415-555-4242'. 
+1.Import the re module. All regex functions in Python are in the re module
+
+2.Pass the regex string to re.compile() to get a Pattern object.
+
+3.Pass the text string to the Pattern object's search() method to get a Match object.
+
+4.Call the Match object's group() method to get the string of the matched text.
+
+>>> import re
+>>> phone_num_pattern_obj = re.compile(r'\d{3}-\d{3}-\d{4}')
+>>> match_obj = phone_num_pattern_obj.search('My number is 415-555-4242.')
+>>> match_obj.group()
+'415-555-4242'
+
+re.compile returns a Pattern object. You only need to re.compile one time and once you do you can use the Pattern object's search method
+A Pattern object's search() method searches the string it is passed for any matches to the regex. The search() method will return None if the regex pattern is't found in the string. If the pattern is found, the search() method returns a Match object, which will have a group() method that returns a string of the matched text.
+
+Adding parenthess will create groups in the regex string: r'(\d\d\d)-(\d\d\d-\d\d\d\d)'. Then you can use the group() method of Match objects to grab the matching text from just one group
+
+>>> import re
+>>> phone_re = re.compile(r'(\d\d\d)-(\d\d\d-\d\d\d\d)')
+>>> mo = phone_re.search('My number is 415-555-4242.')
+>>> mo.group(1)  # Returns the first group of the matched text
+'415'
+>>> mo.group(2)  # Returns the second group of the matched text
+'555-4242'
+>>> mo.group(0)  # Returns the full matched text
+'415-555-4242'
+>>> mo.group()  # Also returns the full matched text
+'415-555-4242'
+
+mo.groups() returns a tuple with all of the matches. tuples have the ability to assign each value in the tuple to different values
+>>> mo.groups()
+('415', '555-4242')
+>>> area_code, main_number = mo.groups()
+>>> print(area_code)
+415
+>>> print(main_number)
+555-4242
+
+When we want to include escape characters in the regex search, we do it like so
+
+>>> pattern = re.compile(r'(\(\d\d\d\)) (\d\d\d-\d\d\d\d)')
+>>> mo = pattern.search('My phone number is (415) 555-4242.')
+>>> mo.group(1)
+'(415)'
+>>> mo.group(2)
+'555-4242'
+
+The \(and \) escape characters in the raw string passed to re.compile() will match actual parenthesis characters.
+If you want to detect these characters as part of your text pattern, you need to escape them with a backslash:
+
+\$ \(\) \* \+ \- \. \? \[\\ \] \^ \{\| \}
+
+You can use the | character to match one of multiple expressions. For example, the regular expression r'Cat|Dog' will match either 'Cat' or 'Dog'.
+>>> import re
+>>> pattern = re.compile(r'Cat(erpillar|astrophe|ch|egory)')
+>>> match = pattern.search('Catch me if you can.')
+>>> match.group()
+'Catch'
+>>> match.group(1)
+'ch'
+
+The method call match.group() returns the full matched text 'Catch', while match.group(1) returns just the part of the matched text inside the first parentheses group, 'ch'
+
+Pattern objects have a findall() method that returns a full list of all the strings of every metch in the string rather than search() which finds the first matched text and returns a Match object of that string. If there are groups in the regular expression, then findall() will return a list of tuples. Each tuple represents a single match, and the tuple has strings for each group in the regex. 
+
+Without groups
+>>> import re
+>>> pattern = re.compile(r'\d{3}-\d{3}-\d{4}')  # This regex has no groups.
+>>> pattern.findall('Cell: 415-555-9999 Work: 212-555-0000')
+['415-555-9999', '212-555-0000']
+
+With groups
+>>> import re
+>>> pattern = re.compile(r'(\d{3})-(\d{3})-(\d{4})')  # This regex has groups.
+>>> pattern.findall('Cell: 415-555-9999 Work: 212-555-0000')
+[('415', '555', '9999'), ('212', '555', '0000')]
+
+findall() does not overlap matches. If it finds 3 characters that fir the pattern and there are 3 next to it that fit as well it will only pick the first occurence
+>>> import re
+>>> pattern = re.compile(r'\d{3}')
+>>> pattern.findall('1234')
+['123']
+>>> pattern.findall('12345')
+['123']
+>>> pattern.findall('123456')
+['123', '456']
+
+Regexes have two parts: qualifiers that tell what characters we are trying to match and quantifiers which dictate how many of that character we are looking for.
+So in r'\d{3}-\d{3}-\d{4}' the qualifiers are r'\d' and '-' and the quantifiers are '{3}' and '{4}'
+
+We can define multiple characters to look for using a character class. Like [aeiouAEIOU] which would be equivalent to using a|e|i|o|u|A|E|I|O|U
+>>> import re
+>>> vowel_pattern = re.compile(r'[aeiouAEIOU]')
+>>> vowel_pattern.findall('RoboCop eats BABY FOOD.')
+['o', 'o', 'o', 'e', 'a', 'A', 'O', 'O']
+
+You can also include ranges of letters or numbers by using a hyphen. For example, the character class [a-zA-Z0-9] will match all lowercase letters, uppercase letters, and numbers.
+
+Note that, inside the square brackets, the normal regular expression symbols are not interpreted as such. This means you do not need to escape characters such as parentheses inside the square brackets if you want to match literal parentheses. For example, the character class [()] will match either an open or close parenthesis. You do not need to write this as [\(\)].
+
+By placing a caret character (^) just after the character class's opening bracket, you can make a negative character class. A negative character class will match all the characters that are not in the character class. For example, enter the following into the interactive shell:
+
+>>> import re
+>>> consonant_pattern = re.compile(r'[^aeiouAEIOU]')
+>>> consonant_pattern.findall('RoboCop eats BABY FOOD.')
+['R', 'b', 'C', 'p', ' ', 't', 's', ' ', 'B', 'B', 'Y', ' ', 'F', 'D', '.']
+
+
+Common Character Classes
+
+\d - Any digit from 0 - 9
+\D - Any character that is not a numeric digit
+\w - Any leter, numeric digit, or the underscore character
+\W - Any character that is not a letter, numeric digit, or the underscore character (Used for looking matching word characters)
+\s - Any space, tab, or new line charcter (Used for looking for space type characters) 
+\S - Any character that is not a space, tab, or new line character
+
+The regular expression \d+\s\w+ will match text that has one or more numeric digits (\d+), followed by a whitespace character (\s), followed by one or more letter/digit/underscore characters (\w+). The findall() method returns all matching strings of the regular expression pattern in a list.
+
+The . (or dot) character in a regular expression string matches any character except for a newline. 
+>>> import re
+>>> at_re = re.compile(r'.at')
+>>> at_re.findall('The cat in the hat sat on the flat mat.')
+['cat', 'hat', 'sat', 'lat', 'mat']
+Remember that the dot character will match just one character, which is why the text flat in the previous example matched only lat. To match an actual period, escape the dot with a backslash: \.
+
+The ? character flags the preceding qualifier as optional. The character in front of the ? is optional
+>>> import re
+>>> pattern = re.compile(r'42!?')
+>>> pattern.search('42!')
+<re.Match object; span=(0, 3), match='42!'>
+>>> pattern.search('42')
+<re.Match object; span=(0, 2), match='42'>
+The ? part of the regular expression means that the pattern ! is optional. So it matches both 42! (with the exclamation mark) and 42 (without it).
+
+You can make multiple characters optional by using parentheses
+>>> pattern = re.compile(r'(\d{3}-)?\d{3}-\d{4}')
+>>> match1 = pattern.search('My number is 415-555-4242')
+>>> match1.group()
+'415-555-4242'
+
+>>> match2 = pattern.search('My number is 555-4242')
+>>> match2.group()
+'555-4242'
+You can use \? to search for a ? character rather than using it to represent an optional character
+
+The * character means the text before it can happen any  number of times (even 0)  and still be considered a match
+>>> import re
+>>> pattern = re.compile('Eggs(and spam)*')
+>>> pattern.search('Eggs')
+<re.Match object; span=(0, 4), match='Eggs'>
+>>> pattern.search('Eggs and spam')
+<re.Match object; span=(0, 13), match='Eggs and spam'>
+>>> pattern.search('Eggs and spam and spam')
+<re.Match object; span=(0, 22), match='Eggs and spam and spam'>
+>>> pattern.search('Eggs and spam and spam and spam')
+<re.Match object; span=(0, 31), match='Eggs and spam and spam and spam'>
+While the 'Eggs' part of the string must appear once, there can be any number of ' and spam' following it, including zero instances.
+
+The + character means the string must appear at least once to be considered a match
+>>> pattern = re.compile('Eggs(and spam)+')
+>>> pattern.search('Eggs and spam')
+<re.Match object; span=(0, 13), match='Eggs and spam'>
+>>> pattern.search('Eggs and spam and spam')
+<re.Match object; span=(0, 22), match='Eggs and spam and spam'>
+>>> pattern.search('Eggs and spam and spam and spam')
+<re.Match object; span=(0, 31), match='Eggs and spam and spam and spam'>
+
+Instead of one number, you can specify a range by writing a minimum, a comma, and a maximum in between the curly brackets. For example, the regex (Ha){3,5} will match 'HaHaHa', 'HaHaHaHa', and 'HaHaHaHaHa'.
+
+Python expressions are greedy by default (will search for the longest result). We can specify if we want the laziest match (the shortest) or the greediest match
+>>> import re
+>>> greedy_pattern = re.compile(r'(Ha){3,5}')
+>>> match1 = greedy_pattern.search('HaHaHaHaHa')
+>>> match1.group()
+'HaHaHaHaHa'
+
+>>> lazy_pattern = re.compile(r'(Ha){3,5}?')
+>>> match2 = lazy_pattern.search('HaHaHaHaHa')
+>>> match2.group()
+'HaHaHa'
+Note that the question mark can have two meanings in regular expressions: declaring a lazy match or declaring an optional qualifier. These meanings are entirely unrelated.
+The ? quantifier is the same as {0,1}
+The * quantifier is the same as {0,}
+The + quantifier is the same as {1,}
+
+Using .* we can match anything and everything
+>>> import re
+>>> name_pattern = re.compile(r'First Name: (.*) Last Name: (.*)')
+>>> name_match = name_pattern.search('First Name: Al Last Name: Sweigart')
+>>> name_match.group(1)
+'Al'
+>>> name_match.group(2)
+'Sweigart'
+This will always try to find as many matches as possible after First Name and Last Name. .* uses greedy search always while .*? matches any text in a non greedy or lazy way
+>>> import re
+>>> lazy_pattern = re.compile(r'<.*?>')
+>>> match1 = lazy_pattern.search('<To serve man> for dinner.>')
+>>> match1.group()
+'<To serve man>'
+
+>>> greedy_re = re.compile(r'<.*>')
+>>> match2 = greedy_re.search('<To serve man> for dinner.>')
+>>> match2.group()
+'<To serve man> for dinner.>'
+
+We can use ^ at the start of the regex to specify that the pattern must occur at the start of the searched text, You can use a $ at the end of the string to specify that the pattern must be at the end of the string to be a match
+
+>>> import re
+>>> begins_with_hello = re.compile(r'^Hello')
+>>> begins_with_hello.search('Hello, world!')
+<re.Match object; span=(0, 5), match='Hello'>
+>>> begins_with_hello.search('He said "Hello."') == None
+True
+
+>>> import re
+>>> ends_with_number = re.compile(r'\d$')
+>>> ends_with_number.search('Your number is 42')
+<re.Match object; span=(16, 17), match='2'>
+>>> ends_with_number.search('Your number is forty two.') == None
+True
+
+You can also use \b to make a regex pattern match only on a word boundary: the start of a word, end of a word, or both the start and end of a word. In this case, a word is a sequence of letters separated by non-letter characters. For example, r'\bcat.*?\b' matches a word that begins with 'cat' followed by any other characters up to the next word boundary
+>>> import re
+>>> pattern = re.compile(r'\bcat.*?\b')
+>>> pattern.findall('The cat found a catapult catalog in the catacombs.')
+['cat', 'catapult', 'catalog', 'catacombs']
+
+\B matches anything that is not a word boundary
+>>> import re
+>>> pattern = re.compile(r'\Bcat\B')
+>>> pattern.findall('certificate')  # Match
+['cat']
+>>> pattern.findall('catastrophe')  # No match
+[]
+
+When you want to match regardless of case (Case Insensitive Matching) we can use re.IGNORECASE or re.I as a second argument to re.compile()
+>>> import re
+>>> pattern = re.compile(r'robocop', re.I)
+>>> pattern.search('RoboCop is part man, part machine, all cop.').group()
+'RoboCop'
+
+>>> pattern.search('ROBOCOP protects the innocent.').group()
+'ROBOCOP'
+
+>>> pattern.search('Have you seen robocop?').group()
+'robocop'
+
+To substitute certain strings we can use the sub() method. First parameter being what will replace the matched string if found and the second being the string of text used to look for the string match
+>>> import re
+>>> agent_pattern = re.compile(r'Agent \w+')
+>>> agent_pattern.sub('CENSORED', 'Agent Alice contacted Agent Bob.')
+'CENSORED contacted CENSORED.'
+
+SUMMARY for regex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

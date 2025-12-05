@@ -1,0 +1,2 @@
+python3 -m venv myenv #use to start a new environment
+source myenv/bin/activate #activate environment

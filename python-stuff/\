@@ -1,0 +1,27 @@
+CHAPTER 9
+TEXT PATTERN MATCHING WITH REGULAR EXPRESSIONS
+
+We use regular expressions and patterns to match and simplify processes to take 3 steps rather than 3000
+Like looking for "-" in phone numbers or any character separating a group of numbers 
+This pattern matching method refers to a regular expression
+
+Regular expressions, called regexes for short, are a sort of mini language that describes a pattern of text. For example, the characters \d in a regex stand for a decimal numeral between 0 and 9. 
+Note that we often write regex strings as raw strings, with the r prefix. This is useful, as regex strings often have backslashes. Without using raw strings, we would have to enter expressions such as '\\d'.
+
+We'll stick with the example regular expression string r'\d{3}-\d{3}-\d{4}' used to find US phone numbers in a text string 'My number is 415-555-4242'. 
+1.Import the re module. All regex functions in Python are in the re module
+
+2.Pass the regex string to re.compile() to get a Pattern object.
+
+3.Pass the text string to the Pattern object's search() method to get a Match object.
+
+4.Call the Match object's group() method to get the string of the matched text.
+
+>>> import re
+>>> phone_num_pattern_obj = re.compile(r'\d{3}-\d{3}-\d{4}')
+>>> match_obj = phone_num_pattern_obj.search('My number is 415-555-4242.')
+>>> match_obj.group()
+'415-555-4242'
+
+
+
